@@ -25,7 +25,9 @@ Src/main.o: ../Src/main.c C:/Students/yxa/stm32/gpio/Inc/main.h \
  C:/Students/yxa/stm32/gpio/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  C:/Students/yxa/stm32/gpio/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  C:/Students/yxa/stm32/gpio/Inc/gpio.h \
- C:/Students/yxa/stm32/gpio/Inc/Rcc.h
+ C:/Students/yxa/stm32/gpio/Inc/Rcc.h \
+ C:/Students/yxa/stm32/gpio/Inc/Nvic.h \
+ C:/Students/yxa/stm32/gpio/Inc/SysTick.h
 
 C:/Students/yxa/stm32/gpio/Inc/main.h:
 
@@ -82,3 +84,7 @@ C:/Students/yxa/stm32/gpio/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex
 C:/Students/yxa/stm32/gpio/Inc/gpio.h:
 
 C:/Students/yxa/stm32/gpio/Inc/Rcc.h:
+
+C:/Students/yxa/stm32/gpio/Inc/Nvic.h:
+
+C:/Students/yxa/stm32/gpio/Inc/SysTick.h:

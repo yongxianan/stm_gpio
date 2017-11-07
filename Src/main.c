@@ -38,8 +38,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_hal.h"
+#include <stdio.h>
 #include "gpio.h"
 #include "Rcc.h"
+#include "Nvic.h"
+#include "SysTick.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -69,6 +72,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+	initialise_monitor_handles();
 
   /* USER CODE END 1 */
 
@@ -92,18 +96,65 @@ int main(void)
   MX_GPIO_Init();
 
   /* USER CODE BEGIN 2 */
+ // printf("hello!\n");
+  volatile uint32_t flags=1;
+
+
+//enable I2C1 event interrupt
+  nvicEnableIrq(80);
+  nvicSetPriorty(80,8);
+  //nvicDisableIrq(80);
+
+enableGpioA();
 enableGpioG();
-gpioGConfig(redLedPin, GPIO_OUT_MODE, GPIO_PUSH_PULL, GPIO_NO_PULL_UP_DOWN, GPIO_HI_SPEED);
-gpioGConfig(greenLedPin, GPIO_OUT_MODE, GPIO_PUSH_PULL, GPIO_NO_PULL_UP_DOWN, GPIO_LOW_SPEED);
+gpio_config(gpio_a,0,GPIO_MODE_IN,0,0,0);
+gpio_config(gpio_g,red_led_pin,GPIO_OUT_MODE,GPIO_PUSH_PULL,GPIO_NO_PULL_UP_DOWN,GPIO_HI_SPEED);
+gpio_config(gpio_g,green_led_pin,GPIO_OUT_MODE,GPIO_PUSH_PULL,GPIO_NO_PULL_UP_DOWN,GPIO_LOW_SPEED);
+
+//gpioGConfig(red_led_pin, GPIO_OUT_MODE, GPIO_PUSH_PULL, GPIO_NO_PULL_UP_DOWN, GPIO_HI_SPEED);
+//gpioGConfig(green_led_pin, GPIO_OUT_MODE, GPIO_PUSH_PULL, GPIO_NO_PULL_UP_DOWN, GPIO_LOW_SPEED);
+
+  enableGpioC();
+  enableGpioG();
+  sysTickPrescaledSpeed();
+  sysTickSetReload(11250000);
+  sysTickClearCounter();
+  sysTickIntrDisable();
+  sysTickEnable();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
   /* USER CODE END WHILE */
- gpioGWrite(14, 1);
- gpioGWrite(13, 1);
+	  /*
+	  gpio_bit_set_reset_register(gpio_g,13,1);
+	  if(gpio_g->bit_set_reset_register==0001000000000000)
+	  {
+		  gpio_write(gpio_g,green_led_pin, 1);
+	  }
+	  else if(gpio_g->bit_set_reset_register==0000000000000000)
+	  {
+		  gpio_write(gpio_g,green_led_pin, 0);
+	  }
+	  gpio_write(gpio_g,red_led_pin, 0);
+	  HAL_Delay(100);
+	  gpio_write(gpio_g,red_led_pin, 1);
+	  HAL_Delay(100);
+*/
+
+	  gpio_write(gpio_g,red_led_pin,1);
+
+	  while(!sysTickHasExpired());
+	  gpio_write(gpio_g,red_led_pin,0);
+	  while(!sysTickHasExpired());
+
+	  gpio_write(gpio_c,4,0);
+	  gpio_write(gpio_c,5,1);
+	  gpio_write(gpio_c,4,1);
+	  gpio_write(gpio_c,5,0);
 
   /* USER CODE BEGIN 3 */
 
@@ -112,6 +163,12 @@ gpioGConfig(greenLedPin, GPIO_OUT_MODE, GPIO_PUSH_PULL, GPIO_NO_PULL_UP_DOWN, GP
 
 }
 
+void My_SysTick_Handler(void)
+{
+	static int ledState=0;
+	volatile int flags=Tick->CTRL;
+	gpio_write(gpio_g,red_led_pin,(ledState=!ledState));
+}
 /** System Clock Configuration
 */
 void SystemClock_Config(void)

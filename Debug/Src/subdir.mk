@@ -4,7 +4,9 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../Src/Nvic.c \
 ../Src/Rcc.c \
+../Src/Rng.c \
 ../Src/gpio.c \
 ../Src/main.c \
 ../Src/stm32f4xx_hal_msp.c \
@@ -12,7 +14,9 @@ C_SRCS += \
 ../Src/system_stm32f4xx.c 
 
 OBJS += \
+./Src/Nvic.o \
 ./Src/Rcc.o \
+./Src/Rng.o \
 ./Src/gpio.o \
 ./Src/main.o \
 ./Src/stm32f4xx_hal_msp.o \
@@ -20,7 +24,9 @@ OBJS += \
 ./Src/system_stm32f4xx.o 
 
 C_DEPS += \
+./Src/Nvic.d \
 ./Src/Rcc.d \
+./Src/Rng.d \
 ./Src/gpio.d \
 ./Src/main.d \
 ./Src/stm32f4xx_hal_msp.d \
